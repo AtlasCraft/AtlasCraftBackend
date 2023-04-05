@@ -1,0 +1,13 @@
+
+name: Test Server Workflow
+on: push # Run this workflow whenever a push occurs
+jobs:
+  test-server:
+    runs-on: ubuntu-latest # Run the job on an Ubuntu environment
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2 # Checkout the latest code from the repository
+      - name: Install dependencies
+        run:  npm install # Change to the server folder and install dependencies
+      - name: Run tests
+        run: npm test # Change to the server folder and run tests
