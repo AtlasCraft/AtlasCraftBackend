@@ -4,7 +4,6 @@ const bcrypt = require('bcryptjs');
 const { response } = require('express');
 
 const saltRounds = 10;
-const salt = await bcrypt.genSalt(saltRounds);
 getLoggedIn = async (req, res) => {
   auth.verify(req, res, async function () {
     try {
@@ -28,15 +27,29 @@ getLoggedIn = async (req, res) => {
 
 registerUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, passwordVerify, username } =
-      req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      passwordVerify,
+      username,
+      securityQuestion1,
+      securityQuestion2,
+      answer1,
+      answer2,
+    } = req.body;
     if (
       !firstName ||
       !lastName ||
       !email ||
       !password ||
       !passwordVerify ||
-      !username
+      !username ||
+      !answer1 ||
+      !answer2 ||
+      !securityQuestion1 ||
+      !securityQuestion2
     ) {
       return res
         .status(400)
@@ -59,9 +72,10 @@ registerUser = async (req, res) => {
         errorMessage: 'An account with this email address already exists.',
       });
     }
-
+    const salt = await bcrypt.genSalt(saltRounds);
     const passwordHash = await bcrypt.hash(password, salt);
-
+    const answer1Hash = await bcrypt.hash(answer1, salt);
+    const answer2Hash = await bcrypt.hash(answer2, salt);
     const newUser = new User({
       firstName,
       lastName,
@@ -70,8 +84,8 @@ registerUser = async (req, res) => {
       passwordHash,
       securityQuestion1,
       securityQuestion2,
-      answer1,
-      answer2,
+      answer1: answer1Hash,
+      answer2: answer2Hash,
     });
     const savedUser = await newUser.save();
 
@@ -148,8 +162,9 @@ loginUser = async (req, res) => {
 // Retrieve Security Questions
 retrieveSecurityQuestions = async (req, res) => {
   try {
-    const username = req.username;
+    const username = req.params.username;
     const user = await User.findOne({ username });
+    console.log(user);
     res.status(200).json({
       success: true,
       securityQuestion1: user.securityQuestion1,
@@ -164,7 +179,8 @@ retrieveSecurityQuestions = async (req, res) => {
 // Forgot Password
 forgotPassword = async (req, res) => {
   try {
-    const { newPassword, newPasswordConfirm, answer1, answer2 } = req.body;
+    const { username, newPassword, newPasswordConfirm, answer1, answer2 } =
+      req.body;
     const user = await User.findOne({ username });
     if (!user) {
       return res.status(400).json({ errorMessage: 'Invalid Credentials' });
@@ -172,6 +188,8 @@ forgotPassword = async (req, res) => {
     answer1Verification = await bcrypt.compare(answer1, user.answer1);
     answer2Verification = await bcrypt.compare(answer2, user.answer2);
     if (answer1Verification && answer2Verification) {
+      const salt = await bcrypt.genSalt(saltRounds);
+
       const passwordHash = await bcrypt.hash(newPassword, salt);
       user.passwordHash = passwordHash;
       await user.save();
@@ -194,10 +212,12 @@ changePassword = async (req, res) => {
         .status(400)
         .json({ errorMessage: 'Please enter the same password twice' });
     }
-    const match = await bcrypt.compare(password, user.passwordHash);
+    const match = await bcrypt.compare(oldPassword, user.passwordHash);
     if (!match) {
       return res.status(400).json({ errorMessage: 'Invalid Credentials' });
     } else {
+      const salt = await bcrypt.genSalt(saltRounds);
+
       const passwordHash = await bcrypt.hash(newPassword, salt);
       user.passwordHash = passwordHash;
       await user.save();
@@ -220,4 +240,7 @@ module.exports = {
   registerUser,
   loginUser,
   logoutUser,
+  retrieveSecurityQuestions,
+  changePassword,
+  forgotPassword,
 };
