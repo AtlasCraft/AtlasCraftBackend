@@ -13,12 +13,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: [
-      'http://64.227.29.95',
-      'https://top5lister.onrender.com',
-      'http://localhost:3000',
-      'https://urchin-app-zt4cv.ondigitalocean.app',
-    ],
+    origin: ['https://atlascraft.onrender.com'],
     credentials: true,
   })
 );
@@ -34,6 +29,8 @@ const connectDB = require('./db');
 connectDB();
 
 // PUT THE SERVER IN LISTENING MODE
-const server = app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const server = app.listen(PORT, () =>
+  console.log(`Server running on port ${PORT}`)
+);
 
 module.exports = { app, server };
