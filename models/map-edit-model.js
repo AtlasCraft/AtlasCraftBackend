@@ -8,7 +8,7 @@ const MapEditSchema = new Schema(
     geojson: { type: Object, required: true },
     ownedUser: { type: String, required: true },
     commentListPairs: { type: [Object], required: true },
-    property: { type: Boolean, required: true },
+    published: { type: Boolean, required: true },
   },
   { timestamps: true }
 );

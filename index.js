@@ -17,8 +17,11 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json());
 app.use(cookieParser());
+app.use(express.json({ limit: '20mb' }));
+app.use(
+  express.urlencoded({ limit: '20mb', extended: true, parameterLimit: 50000 })
+);
 
 // SETUP OUR OWN ROUTERS AS MIDDLEWARE
 const top5listsRouter = require('./routes/top5lists-router');

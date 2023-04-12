@@ -8,7 +8,6 @@ getLoggedIn = async (req, res) => {
   auth.verify(req, res, async function () {
     try {
       const loggedInUser = await User.findOne({ _id: req.userId });
-      console.log(loggedInUser);
       return res.status(200).json({
         loggedIn: true,
         user: {
@@ -164,14 +163,12 @@ retrieveSecurityQuestions = async (req, res) => {
   try {
     const username = req.params.username;
     const user = await User.findOne({ username });
-    console.log(user);
     res.status(200).json({
       success: true,
       securityQuestion1: user.securityQuestion1,
       securityQuestion2: user.securityQuestion2,
     });
   } catch (err) {
-    console.log(err);
     res.status(500).send();
   }
 };

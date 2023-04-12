@@ -1,4 +1,7 @@
 const { MongoMemoryServer } = require('mongodb-memory-server');
+const mapData = require('../test/MapEditingInfo.json');
+const vatican = require('../test/vatican.json');
+
 const mockConnectDB = async () => {
   mongod = await MongoMemoryServer.create();
   dbUrl = mongod.getUri();
@@ -116,5 +119,77 @@ describe('All tests', () => {
       });
     expect(response.statusCode).toBe(200);
     expect(response.body.status).toBe('success');
+  }, 60000);
+
+  test('Create Map and Delete Map', async () => {
+    // login user
+    let response = await request(app).post('/api/login').send({
+      username: 'testy',
+      password: 'test123456',
+    });
+    const cookie = response.get('Set-Cookie');
+
+    response = await request(app)
+      .post('/api/mapeditinginfo')
+      .set('Cookie', cookie)
+      .send({
+        mapName: mapData.mapName,
+        geojson: mapData.geojson,
+      });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.map.mapName).toBe(mapData.mapName);
+    expect(response.body.map.ownedUser).toBe('testy');
+    expect(response.body.map.geojson.toString()).toBe(
+      mapData.geojson.toString()
+    );
+
+    // Delete Map
+    const mapId = response.body.map._id;
+    response = await request(app)
+      .delete(`/api/mapeditinginfo/${mapId}`)
+      .set('Cookie', cookie);
+    expect(response.statusCode).toBe(200);
+
+    response = await request(app)
+      .get(`/api/mapeditinginfo/${mapId}`)
+      .set('Cookie', cookie);
+    expect(response.statusCode).toBe(400);
+  }, 60000);
+
+  test('Update Map Name and Get map', async () => {
+    // login user
+    let response = await request(app).post('/api/login').send({
+      username: 'testy',
+      password: 'test123456',
+    });
+    const cookie = response.get('Set-Cookie');
+
+    response = await request(app)
+      .post('/api/mapeditinginfo')
+      .set('Cookie', cookie)
+      .send({
+        mapName: mapData.mapName,
+        geojson: mapData.geojson,
+      });
+
+    const mapId = response.body.map._id;
+    const newMapName = 'Vatican';
+
+    response = await request(app)
+      .post(`/api/mapeditinginfo/${mapId}`)
+      .set('Cookie', cookie)
+      .send({
+        mapName: newMapName,
+        geojson: vatican,
+      });
+    expect(response.statusCode).toBe(200);
+
+    response = await request(app)
+      .get(`/api/mapeditinginfo/${mapId}`)
+      .set('Cookie', cookie);
+    expect(response.statusCode).toBe(200);
+    expect(response.body.map.mapName).toBe(newMapName);
+    expect(response.body.map.geojson.toString()).toBe(vatican.toString());
   }, 60000);
 });
