@@ -2,6 +2,7 @@ const auth = require('../auth');
 const express = require('express');
 const UserController = require('../controllers/user-controller');
 const MapEditController = require('../controllers/map-edit-controller');
+const MapCardController = require('../controllers/mapcard-controller');
 const router = express.Router();
 
 router.post(
@@ -24,6 +25,8 @@ router.post(
   auth.verify,
   MapEditController.updateMapEditInfo
 );
+
+router.get('/mapcard', auth.verify, MapCardController.getAllCards);
 
 router.post('/register', UserController.registerUser);
 router.post('/login', UserController.loginUser);

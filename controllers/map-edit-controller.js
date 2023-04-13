@@ -23,6 +23,7 @@ createMapEditingInfo = async (req, res) => {
       mapId: map._id,
       mapName: req.body.mapName,
       ownedUser: req.username,
+      published: false,
     });
     await mapcard.save();
     res.status(200).json({
@@ -47,7 +48,7 @@ deleteMapEditInfo = async (req, res) => {
     }
     await MapEditInfo.findOneAndDelete({ _id: mapId });
     await MapCard.findOneAndDelete({ mapId });
-    return res.status(200).json().send({ success: true });
+    return res.status(200).json({ success: true }).send();
   } catch (err) {
     console.log(err);
     return res.status(400).send();
@@ -77,7 +78,7 @@ getMapEditInfoById = async (req, res) => {
 };
 updateMapEditInfo = async (req, res) => {
   const mapId = req.params.id;
-  const { mapName, geojson } = req.body;
+  const { mapName, geojson, published } = req.body;
   try {
     const map = await MapEditInfo.findById(mapId);
     if (!map || map.ownedUser !== req.username) {
@@ -88,9 +89,15 @@ updateMapEditInfo = async (req, res) => {
     }
     map.mapName = mapName;
     map.geojson = geojson;
+    if (published) {
+      map.published = published;
+    }
     await map.save();
     const mapcard = await MapCard.findOne({ mapId });
     mapcard.mapName = mapName;
+    if (published) {
+      mapcard.published = published;
+    }
     await mapcard.save();
     return res.status(200).json({ success: true }).send();
   } catch (err) {
