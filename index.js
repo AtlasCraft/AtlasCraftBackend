@@ -13,7 +13,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: ['https://atlascraft.onrender.com'],
+    origin: ['https://atlascraft.onrender.com', 'http://localhost:3000'],
     credentials: true,
   })
 );
