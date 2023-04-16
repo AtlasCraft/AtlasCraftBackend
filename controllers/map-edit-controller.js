@@ -24,6 +24,8 @@ createMapEditingInfo = async (req, res) => {
       mapName: req.body.mapName,
       ownedUser: req.username,
       published: false,
+      likedUsers: [],
+      dislikedUsers: [],
     });
     await mapcard.save();
     res.status(200).json({

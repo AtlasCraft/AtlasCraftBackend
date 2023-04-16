@@ -8,6 +8,8 @@ const MapCardSchema = new Schema(
     mapName: { type: String, required: true },
     ownedUser: { type: String, required: true },
     published: { type: Boolean, required: true },
+    likedUsers: { type: [String], required: true },
+    dislikedUsers: { type: [String], required: true },
   },
   { timestamps: true }
 );

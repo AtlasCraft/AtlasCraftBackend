@@ -27,6 +27,12 @@ router.post(
 );
 
 router.get('/mapcard', auth.verify, MapCardController.getAllCards);
+router.post('/mapcard/:id/likes', auth.verify, MapCardController.updateLikes);
+router.post(
+  '/mapcard/:id/dislikes',
+  auth.verify,
+  MapCardController.updateDislikes
+);
 
 router.post('/register', UserController.registerUser);
 router.post('/login', UserController.loginUser);
