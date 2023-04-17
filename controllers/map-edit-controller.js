@@ -61,7 +61,7 @@ getMapEditInfoById = async (req, res) => {
   const mapId = req.params.id;
   try {
     const map = await MapEditInfo.findById(mapId);
-    if (!map || map.ownedUser !== req.username) {
+    if (!map || (map.ownedUser !== req.username && !map.published)) {
       return res
         .status(400)
         .json({ success: false, message: 'Map not found' })
