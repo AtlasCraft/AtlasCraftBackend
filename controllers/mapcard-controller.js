@@ -39,6 +39,7 @@ updateLikes = async (req, res) => {
     if (!maps.likedUsers.includes(req.username)) {
       maps.likedUsers.push(req.username);
     }
+    await maps.save();
     return res.status(200).send();
   } catch (err) {
     console.log(err);
@@ -58,6 +59,7 @@ updateDislikes = async (req, res) => {
     if (!maps.dislikedUsers.includes(req.username)) {
       maps.dislikedUsers.push(req.username);
     }
+    await maps.save();
     return res.status(200).send();
   } catch (err) {
     console.log(err);
