@@ -38,6 +38,8 @@ updateLikes = async (req, res) => {
     );
     if (!maps.likedUsers.includes(req.username)) {
       maps.likedUsers.push(req.username);
+    } else {
+      maps.likedUsers = maps.likedUsers.filter((user) => user !== req.username);
     }
     await maps.save();
     return res.status(200).send();
@@ -58,6 +60,10 @@ updateDislikes = async (req, res) => {
     maps.likedUsers = maps.likedUsers.filter((user) => user !== req.username);
     if (!maps.dislikedUsers.includes(req.username)) {
       maps.dislikedUsers.push(req.username);
+    } else {
+      maps.dislikedUsers = maps.dislikedUsers.filter(
+        (user) => user !== req.username
+      );
     }
     await maps.save();
     return res.status(200).send();
