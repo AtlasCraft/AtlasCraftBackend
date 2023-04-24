@@ -33,7 +33,7 @@ updateLikes = async (req, res) => {
     if (!maps) {
       return res.status(400).send();
     }
-    maps.dislikedUser = maps.dislikedUsers.filter(
+    maps.dislikedUsers = maps.dislikedUsers.filter(
       (user) => user !== req.username
     );
     if (!maps.likedUsers.includes(req.username)) {
