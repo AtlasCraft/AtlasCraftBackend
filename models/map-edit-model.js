@@ -9,6 +9,7 @@ const MapEditSchema = new Schema(
     ownedUser: { type: String, required: true },
     commentListPairs: { type: [Object], required: true },
     published: { type: Boolean, required: true },
+    mapProperties: { type: Object },
   },
   { timestamps: true }
 );
