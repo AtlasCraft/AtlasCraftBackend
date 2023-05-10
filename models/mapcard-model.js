@@ -6,7 +6,10 @@ const MapCardSchema = new Schema(
   {
     mapId: { type: String, required: true },
     mapName: { type: String, required: true },
-    thumbail: { type: BSON },
+    thumbail: {
+      data: Buffer,
+      contentType: String,
+    },
     ownedUser: { type: String, required: true },
     published: { type: Boolean, required: true },
     likedUsers: { type: [String], required: true },
