@@ -98,7 +98,7 @@ updateMapEditInfo = async (req, res) => {
     await map.save();
     const mapcard = await MapCard.findOne({ mapId });
     mapcard.mapName = mapName;
-    mapcard.thumbail = thumbail;
+    mapcard.thumbnail = thumbail;
     if (published) {
       mapcard.published = published;
     }
