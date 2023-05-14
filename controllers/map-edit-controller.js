@@ -80,7 +80,7 @@ getMapEditInfoById = async (req, res) => {
 };
 updateMapEditInfo = async (req, res) => {
   const mapId = req.params.id;
-  const { mapName, geojson, mapProperies, published, thumbnail } = req.body;
+  const { mapName, geojson, mapProperties, published, thumbnail } = req.body;
   try {
     const map = await MapEditInfo.findById(mapId);
     if (!map || map.ownedUser !== req.username) {
@@ -91,7 +91,7 @@ updateMapEditInfo = async (req, res) => {
     }
     map.mapName = mapName;
     map.geojson = geojson;
-    map.mapProperies = mapProperties;
+    map.mapProperties = mapProperties;
     if (published) {
       map.published = published;
     }
