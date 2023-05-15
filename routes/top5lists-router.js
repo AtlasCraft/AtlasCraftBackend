@@ -42,6 +42,5 @@ router.get('/sq/:username', UserController.retrieveSecurityQuestions);
 router.post('/forgotPassword', UserController.forgotPassword);
 router.post('/changePassword', auth.verify, UserController.changePassword);
 router.post('/updateComment/:id', MapEditController.updateComment);
-router.get('/getComment/:id', MapEditController.getComment);
 
 module.exports = router;
