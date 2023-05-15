@@ -6,7 +6,7 @@ const MapCardSchema = new Schema(
   {
     mapId: { type: String, required: true },
     mapName: { type: String, required: true },
-    thumbail: {
+    thumbnail: {
       data: Buffer,
       contentType: String,
     },
