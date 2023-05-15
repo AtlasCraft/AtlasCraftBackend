@@ -6,7 +6,7 @@ const MapCardSchema = new Schema(
   {
     mapId: { type: String, required: true },
     mapName: { type: String, required: true },
-    thumbnail: { type: String, required: true },
+    thumbnail: { type: String },
     ownedUser: { type: String, required: true },
     published: { type: Boolean, required: true },
     likedUsers: { type: [String], required: true },
