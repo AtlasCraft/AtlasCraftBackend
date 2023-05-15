@@ -108,9 +108,24 @@ updateMapEditInfo = async (req, res) => {
   }
 };
 
+getComment = async (req, res) => {
+  const mapId = req.params.id;
+  const { commentListPairs } = req.body;
+  try {
+    const map = await MapEditInfo.findById(mapId);
+    map.commentListPairs = commentListPairs;
+    await map.save();
+    return res.status(200).json({ success: true}).send();
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send();
+  }
+}
+
 module.exports = {
   createMapEditingInfo,
   deleteMapEditInfo,
   getMapEditInfoById,
   updateMapEditInfo,
+  getComment
 };
