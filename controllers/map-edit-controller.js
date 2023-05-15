@@ -110,8 +110,9 @@ updateMapEditInfo = async (req, res) => {
   }
 };
 
-getComment = async (req, res) => {
-  const { mapId, commentListPairs } = req.body;
+updateComment = async (req, res) => {
+  const mapId = req.params.id;
+  const { commentListPairs } = req.body;
   try {
     const map = await MapEditInfo.findById(mapId);
     map.commentListPairs = commentListPairs;
@@ -128,5 +129,5 @@ module.exports = {
   deleteMapEditInfo,
   getMapEditInfoById,
   updateMapEditInfo,
-  getComment
+  updateComment
 };
