@@ -112,7 +112,7 @@ updateMapEditInfo = async (req, res) => {
 
 updateComment = async (req, res) => {
   const mapId = req.params.id;
-  const { commentListPairs } = req.body;
+  const commentListPairs = req.body;
   try {
     const map = await MapEditInfo.findById(mapId);
     map.commentListPairs = commentListPairs;
