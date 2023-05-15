@@ -124,10 +124,25 @@ updateComment = async (req, res) => {
   }
 }
 
+getComment = async (req, res) => {
+  const mapId = req.params.id;
+  try {
+    const map = await MapEditInfo.findById(mapId);
+    res.status(200).json({
+      success: true,
+      commentListPairs: map.commentListPairs
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send();
+  }
+}
+
 module.exports = {
   createMapEditingInfo,
   deleteMapEditInfo,
   getMapEditInfoById,
   updateMapEditInfo,
-  updateComment
+  updateComment,
+  getComment
 };
