@@ -117,6 +117,7 @@ updateComment = async (req, res) => {
     const map = await MapEditInfo.findById(mapId);
     map.commentListPairs = commentListPairs;
     await map.save();
+    console.log(commentListPairs);
     return res.status(200).json({ success: true}).send();
   } catch (err) {
     console.log(err);
